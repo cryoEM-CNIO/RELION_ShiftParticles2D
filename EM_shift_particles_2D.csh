@@ -1,16 +1,20 @@
 #!/bin/tcsh
 
 ##### Script for shifting particles based on 2D classification averages#####
+
+#Rafael Fernandez Leiro - CNIO - Spain - rfleiro@cnio.es
+
 #Measure the shift in X and Y using the "show original image" option when displaying run_model.star from a 2D classification
 #To measure the shift drag with middle mouse button
 #Repeat this for every class that you want to shift and save a selection of the particles from every class independently as they have different shifts...
-  #     (+)
-  #      ^ 
-  #      |
-  #(+) <——> (-)
-  #      |
-  #      \/
-  #     (-)
+
+#     (+)
+#      ^ 
+#      |
+#(+) <——> (-)
+#      |
+#      \/
+#     (-)
 
 if ("$1" == "") then
   echo "Usage: EM_shift_particles_2D.csh output.star input.star pixel-ofset-X pixel-ofset-Y"
@@ -55,14 +59,14 @@ set numberOFfield=`grep _rln $datastar | wc -l`
 #offsetX+((displacementX*-cos)-(displacementY*sin) --> component X from moving the particle in X + component X from moving the particle in Y 
 #offsetY+((displacementX*sin)-(displacementY*cos)--> component Y from moving the particle in X + component Y from moving the particle in Y
 
-awk 'NF<3{print}' $datastar | sed ':a;/^[ \n]*$/{$d;N;ba}' | grep -v '_rlnOriginX\|_rlnOriginY' | tr ' ' '@' | tr '\n' '?' | awk '{print $1"_rlnOriginX@?_rlnOriginY@"}' | tr '?' '\n' | tr '@' ' ' > header.tmp
+awk 'NF<3{print}' $datastar | sed ':a;/^[ \n]*$/{$d;N;ba}' | grep -v '_rlnOriginX\|_rlnOriginY' | tr ' ' '@' | tr '\n' '?' | awk '{print $1"_rlnOriginX@?_rlnOriginY@"}' | tr '?' '\n' | tr '@' ' ' > header.rfltmp
 
-awk -v oX=$oriX -v oY=$oriY 'NF>3{$oX=$oY="";print}' $datastar > data.tmp
+grep mrc $datastar | awk -v oX=$oriX -v oY=$oriY 'NF>3{$oX=$oY="";print}' > data.rfltmp
 
-grep mrc $datastar | awk -v oX=$oriX -v oY=$oriY -v psi=$psi -v difX=$difX -v difY=$difY '{print (($oX+(((difX)*(-cos(($psi)*(3.141592/180))))-((difY)*(sin(($psi)*(3.141592/180))))))),(($oY+(((difX)*(sin(($psi)*(3.141592/180))))-((difY)*(cos(($psi)*(3.141592/180)))))))}' > offsets.tmp
+grep mrc $datastar | awk -v oX=$oriX -v oY=$oriY -v psi=$psi -v difX=$difX -v difY=$difY '{print (($oX+(((difX)*(-cos(($psi)*(3.141592/180))))-((difY)*(sin(($psi)*(3.141592/180))))))),(($oY+(((difX)*(sin(($psi)*(3.141592/180))))-((difY)*(cos(($psi)*(3.141592/180)))))))}' > offsets.rfltmp
 
-paste data.tmp offsets.tmp > all.tmp 
-cat header.tmp all.tmp > $outfile
+paste data.rfltmp offsets.rfltmp > all.rfltmp 
+cat header.rfltmp all.rfltmp > $outfile
 
-rm -f *.tmp
+rm -f *.rfltmp
 
