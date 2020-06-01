@@ -71,7 +71,7 @@ awk 'NF<15{print}' $datastar | sed ':a;/^[ \n]*$/{$d;N;ba}' | grep -v '_rlnOrigi
 
 grep mrc $datastar | awk -v oX=$oriX -v oY=$oriY 'NF>15{$oX=$oY="";print}' > data.tmp
 
-grep mrc $datastar | awk -v oX=$oriX -v oY=$oriY -v psi=$psi -v difX=$difX -v difY=$difY v pxsize=$pxsize '{print (($oX+(((difX*pxsize)*(-cos(($psi)*(3.141592/180))))-((difY*pxsize)*(sin(($psi)*(3.141592/180))))))),(($oY+(((difX*pxsize)*(sin(($psi)*(3.141592/180))))-((difY*pxsize)*(cos(($psi)*(3.141592/180)))))))}' > offsets.tmp
+grep mrc $datastar | awk -v oX=$oriX -v oY=$oriY -v psi=$psi -v difX=$difX -v difY=$difY -v pxsize=$pxsize '{print (($oX+(((difX*pxsize)*(-cos(($psi)*(3.141592/180))))-((difY*pxsize)*(sin(($psi)*(3.141592/180))))))),(($oY+(((difX*pxsize)*(sin(($psi)*(3.141592/180))))-((difY*pxsize)*(cos(($psi)*(3.141592/180)))))))}' > offsets.tmp
 
 paste data.tmp offsets.tmp > all.tmp 
 cat header.tmp all.tmp > $outfile
