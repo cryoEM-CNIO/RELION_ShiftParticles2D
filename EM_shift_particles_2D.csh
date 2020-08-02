@@ -18,19 +18,19 @@
 
 if ("$1" == "") then
   echo "Usage: EM_shift_particles_2D.csh output.star input.star pixel-ofset-X pixel-ofset-Y angpix"
-  echo "Example: EM_shift_particles_2D.csh particles.star particles_center.star 20 10 2.567"
+  echo "Example: EM_shift_particles_2D.csh particles_center.star particles.star 20 10 2.567"
   exit
 endif
 
 if ("$2" == "") then
   echo "Usage: EM_shift_particles_2D.csh output.star input.star pixel-ofset-X pixel-ofset-Y angpix"
-  echo "Example: EM_shift_particles_2D.csh particles.star particles_center.star 20 10 2.567"
+  echo "Example: EM_shift_particles_2D.csh particles_center.star particles.star 20 10 2.567"
   exit
 endif
 
 if ("$3" == "") then
   echo "Usage: EM_shift_particles_2D.csh output.star input.star pixel-ofset-X pixel-ofset-Y angpix"
-  echo "Example: EM_shift_particles_2D.csh particles.star particles_center.star 20 10 2.567"
+  echo "Example: EM_shift_particles_2D.csh particles_center.star particles.star 20 10 2.567"
   exit
 else
   set difX=$3
@@ -38,7 +38,7 @@ endif
 
 if ("$4" == "") then
   echo "Usage: EM_shift_particles_2D.csh output.star input.star pixel-ofset-X pixel-ofset-Y angpix"
-  echo "Example: EM_shift_particles_2D.csh particles.star particles_center.star 20 10 2.567"
+  echo "Example: EM_shift_particles_2D.csh particles_center.star particles.star 20 10 2.567"
   exit
 else
   set difY=$4
@@ -46,7 +46,7 @@ endif
 
 if ("$5" == "") then
   echo "Usage: EM_shift_particles_2D.csh output.star input.star pixel-ofset-X pixel-ofset-Y angpix"
-  echo "Example: EM_shift_particles_2D.csh particles.star particles_center.star 20 10 2.567"
+  echo "Example: EM_shift_particles_2D.csh particles_center.star particles.star 20 10 2.567"
   exit
 else
   set pxsize=$5
