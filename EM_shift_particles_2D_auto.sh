@@ -1,12 +1,8 @@
 #!/bin/sh
 
-##### Script for shifting particles based on 2D classification averages#####
+##### Script for shifting particles based on 2D classification averages center of mass#####
 
 #Rafael Fernandez Leiro - CNIO - Spain - rfleiro@cnio.es
-
-#Measure the shift in X and Y using the "show original image" option when displaying run_model.star from a 2D classification
-#To measure the shift drag with middle mouse button
-#Repeat this for every class that you want to shift and save a selection of the particles from every class independently as they have different shifts...
 
 #     (+)
 #      ^ 
@@ -21,7 +17,7 @@ echo "run RELION External job type with EM_shift_particles_2D_auto as executable
 
 #Variables
 
-echo "getting variables"
+echo "getting variables" #this has to improve... very poor
 outfolder=$2
 datastar=$4
 
