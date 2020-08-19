@@ -17,25 +17,27 @@
 #     (-)
 
 echo "save your classes WITHOUT SHIFTING TO CENTER OF MASS!!! then run the script as follows"
-echo "Usage: EM_shift_particles_2D_auto.csh selec_job_folder pixelsize"
-echo "Usage: EM_shift_particles_2D_auto.csh Select/jobXXX 1.45"
+echo "run RELION External job type with EM_shift_particles_2D_auto as executable and the particle.star from selection as input"
 
 #Variables
-echo "getting variables"
-outfolder=$1
-classstar=$1"/class_averages.star"
-datastar=$1"/particles.star"
-outfile=$1"/particles_shifted.star"
-pxsize=$2
 
-out1=$1"/class.star"
-out2=$1"/shifts1.tmp"
-out3=$1"/shifts2.tmp"
-out4=$1"/shifts3.tmp"
-out5=$1"/header.tmp"
-out6=$1"/data.tmp"
-out7=$1"/data_lap.tmp"
-out8=$1"/data_shifted.tmp"
+echo "getting variables"
+outfolder=$2
+datastar=$4
+
+classstar=`echo $datastar | sed 's#particles.star#class_averages.star#'`
+outfile1=$outfolder"particles_shifted.star"
+outfile2=$outfolder"RELION_OUTPUT_NODES.star"
+outfile3=$outfolder"RELION_JOB_EXIT_SUCCESS"
+
+out1=$outfolder"class.star"
+out2=$outfolder"shifts1.tmp"
+out3=$outfolder"shifts2.tmp"
+out4=$outfolder"shifts3.tmp"
+out5=$outfolder"header.tmp"
+out6=$outfolder"data.tmp"
+out7=$outfolder"data_lap.tmp"
+out8=$outfolder"data_shifted.tmp"
 
 classdata=`grep _rlnClassNumber $datastar | awk -F"#" '{print $2}' `
 classclass=`grep _rlnClassNumber $classstar | awk -F"#" '{print $2}' `
@@ -47,6 +49,7 @@ oriX=`grep _rlnOriginXAngst $datastar | awk -F"#" '{print $2}'`
 oriY=`grep _rlnOriginYAngst $datastar | awk -F"#" '{print $2}' `
 psi=`grep "_rlnAnglePsi " $datastar | awk -F"#" '{print $2}' `
 numberOFfield=`grep _rln $datastar | wc -l`
+pxsize=`relion_star_printtable $datastar data_optics _rlnImagePixelSize`
 
 echo "all set..."
 
@@ -79,10 +82,17 @@ for line in $(awk '{print $3,$4,$2}' OFS="_" $out4); do
 done
 
 awk -voX=$oriX -voY=$oriY 'NF>15{$oX=$oY="";print}' $out7 > $out8 
-cat $out5 $out8 > $outfile
+cat $out5 $out8 > $outfile1
 
 echo "done"
 
 rm -rf $outfolder/*tmp
 rm -rf $outfolder/class.star
 rm -rf $outfolder/class_tmp.star
+
+#Finishing up
+
+echo "data_output_nodes\nloop_\n_rlnPipeLineNodeName #1\n_rlnPipeLineNodeType #2\n"$outfile1" 3" > $outfile2
+touch $outfile3
+
+echo "all done"
