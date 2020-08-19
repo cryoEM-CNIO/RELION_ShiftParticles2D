@@ -22,6 +22,7 @@ echo "Usage: EM_shift_particles_2D_auto.csh Select/jobXXX 1.45"
 
 #Variables
 echo "getting variables"
+outfolder=$1
 classstar=$1"/class_averages.star"
 datastar=$1"/particles.star"
 outfile=$1"/particles_shifted.star"
@@ -69,15 +70,19 @@ echo "shifting..."
 awk 'NF<15{print}' $datastar | sed ':a;/^[ \n]*$/{$d;N;ba}' | grep -v '_rlnOriginXAngst\|_rlnOriginYAngst' | tr ' ' '@' | tr '\n' '?' | awk '{print $1"_rlnOriginXAngst@?_rlnOriginYAngst@"}' | tr '?' '\n' | tr '@' ' ' > $out5
 grep mrc $datastar | awk 'NF>15{print $0}' > $out6
 
-for line in $out4; do
-  difX=`awk '{print $3}' $line`
-  difY=`awk '{print $4}' $line`
-  classn=`awk '{print $2}' $line`
+for line in $(awk '{print $3,$4,$2}' OFS="_" $out4); do
+  difX=`echo $line | awk '{print $1}' FS="_"`
+  difY=`echo $line | awk '{print $2}' FS="_"`
+  classn=`echo $line | awk '{print $3}' FS="_"`
   echo "shifting particles for class "$classn
-  awk -v cln=$classn -v clf=$classdata '{if($clf=cln) print}' $out6 | awk -v oX=$oriX -v oY=$oriY -v psi=$psi -v difX=$difX -v difY=$difY -v pxsize=$pxsize '{print $0,(($oX+(((difX*pxsize)*(-cos(($psi)*(3.141592/180))))-((difY*pxsize)*(sin(($psi)*(3.141592/180))))))),(($oY+(((difX*pxsize)*(sin(($psi)*(3.141592/180))))-((difY*pxsize)*(cos(($psi)*(3.141592/180)))))))}' >> $out7
+  awk -vcln=$classn -vclf=$classdata '{if($clf=cln) print}' $out6 | awk -voX=$oriX -voY=$oriY -vpsi=$psi -vdifX=$difX -vdifY=$difY -vpxsize=$pxsize '{print $0,(($oX+(((difX*pxsize)*(-cos(($psi)*(3.141592/180))))-((difY*pxsize)*(sin(($psi)*(3.141592/180))))))),(($oY+(((difX*pxsize)*(sin(($psi)*(3.141592/180))))-((difY*pxsize)*(cos(($psi)*(3.141592/180)))))))}' >> $out7
 done
 
-awk -v oX=$oriX -v oY=$oriY 'NF>15{$oX=$oY="";print}' $out7 > $out8 
+awk -voX=$oriX -voY=$oriY 'NF>15{$oX=$oY="";print}' $out7 > $out8 
 cat $out5 $out8 > $outfile
 
 echo "done"
+
+rm -rf $outfolder/*tmp
+rm -rf $outfolder/class.star
+rm -rf $outfolder/class_tmp.star
