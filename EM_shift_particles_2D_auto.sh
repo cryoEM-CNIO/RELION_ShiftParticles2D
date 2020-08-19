@@ -16,6 +16,7 @@
 #      \/
 #     (-)
 
+echo "save your classes WITHOUT SHIFTING TO CENTER OF MASS!!! then run the script as follows"
 echo "Usage: EM_shift_particles_2D_auto.csh selec_job_folder pixelsize"
 echo "Usage: EM_shift_particles_2D_auto.csh Select/jobXXX 1.45"
 
