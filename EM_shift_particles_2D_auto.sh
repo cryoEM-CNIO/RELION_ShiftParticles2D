@@ -54,9 +54,7 @@ echo "getting shifts"
 
 sed 's#ReferenceImage#ImageName#' $classstar > $out1
 relion_image_handler --i $out1 --o tmp --shift_com | grep Center | awk -F":" '{print $2}' | awk '{print $2, $4}' > $out2
-grep mrcs $classstar | awk '{print $1, $10}' > $out3
-paste $out3 $out2 > $out4
-
+grep mrcs $classstar | awk -vref=$refimage -vcnum=$classclass  '{print $ref, $cnum}' > $outpaste $out3 $out2 > $out4
 echo "shifts ready"
 cat $out4
 
