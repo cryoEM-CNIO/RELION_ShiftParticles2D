@@ -13,7 +13,7 @@
 #     (-)
 
 echo "save your classes WITHOUT SHIFTING TO CENTER OF MASS!!! then run the script as follows"
-echo "run RELION External job type with EM_shift_particles_2D_auto as executable and the particle.star from selection as input"
+echo "run RELION External job with EM_shift_particles_2D_auto as executable and a particle.star from selection as input"
 
 #Variables
 
