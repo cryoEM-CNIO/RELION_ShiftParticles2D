@@ -72,8 +72,9 @@ for line in $(awk '{print $3,$4,$2}' OFS="_" $out4); do
   difX=`echo $line | awk '{print $1}' FS="_"`
   difY=`echo $line | awk '{print $2}' FS="_"`
   classn=`echo $line | awk '{print $3}' FS="_"`
-  echo "shifting particles for class "$classn
-  awk -vcln=$classn -vclf=$classdata '{if($clf=cln) print}' $out6 | awk -voX=$oriX -voY=$oriY -vpsi=$psi -vdifX=$difX -vdifY=$difY -vpxsize=$pxsize '{print $0,(($oX+(((difX*pxsize)*(-cos(($psi)*(3.141592/180))))-((difY*pxsize)*(sin(($psi)*(3.141592/180))))))),(($oY+(((difX*pxsize)*(sin(($psi)*(3.141592/180))))-((difY*pxsize)*(cos(($psi)*(3.141592/180)))))))}' >> $out7
+  npart=`awk -vcln=$classn -vclf=$classdata '{if($clf==cln) print}' $out6 | wc -l`
+  echo "shifting "$npart" particles for class "$classn
+  awk -vcln=$classn -vclf=$classdata '{if($clf==cln) print}' $out6 | awk -voX=$oriX -voY=$oriY -vpsi=$psi -vdifX=$difX -vdifY=$difY -vpxsize=$pxsize '{print $0,(($oX+(((difX*pxsize)*(-cos(($psi)*(3.141592/180))))-((difY*pxsize)*(sin(($psi)*(3.141592/180))))))),(($oY+(((difX*pxsize)*(sin(($psi)*(3.141592/180))))-((difY*pxsize)*(cos(($psi)*(3.141592/180)))))))}' >> $out7
 done
 
 awk -voX=$oriX -voY=$oriY 'NF>15{$oX=$oY="";print}' $out7 > $out8 
