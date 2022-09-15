@@ -12,6 +12,9 @@
 #      \/
 #     (-)
 
+echo EM_shift_particles_2D_manual.sh output.star input.star shiftX-px shiftY-px
+
+
 difX=$3
 difY=$4
 outfile=$1
