@@ -25,7 +25,7 @@ coordY=`grep _rlnCoordinateY $datastar | awk -F"#" '{print $2}' `
 oriX=`grep _rlnOriginX $datastar | awk -F"#" '{print $2}'`
 oriY=`grep _rlnOriginY $datastar | awk -F"#" '{print $2}' `
 psi=`grep "_rlnAnglePsi " $datastar | awk -F"#" '{print $2}' `
-numberOFfield=`grep _rln -n bla.star | awk -F":" 'END{print $1+1}'`
+numberOFfield=`grep _rln -n $datastar | awk -F":" 'END{print $1+1}'`
 pxsize=`relion_star_printtable $datastar data_optics _rlnImagePixelSize`
 
 echo "all set..."
