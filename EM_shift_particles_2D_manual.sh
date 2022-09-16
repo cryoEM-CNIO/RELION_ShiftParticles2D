@@ -40,7 +40,7 @@ awk -vlinenum=$numberOFfield 'NR<linenum{print}' $datastar | sed ':a;/^[ \n]*$/{
 
 awk -v oX=$oriX -v oY=$oriY -vlinenum=$numberOFfield 'NR>linenum-1{$oX=$oY="";print}' $datastar > data.tmp
 
-grep mrc $datastar | awk -voX=$oriX -voY=$oriY -vpsi=$psi -vdifX=$difX -vdifY=$difY -vpxsize=$pxsize '{print $0,(($oX+(((difX*pxsize)*(-cos(($psi)*(3.141592/180))))-((difY*pxsize)*(sin(($psi)*(3.141592/180))))))),(($oY+(((difX*pxsize)*(sin(($psi)*(3.141592/180))))-((difY*pxsize)*(cos(($psi)*(3.141592/180)))))))}' > offsets.tmp
+grep mrc $datastar | awk -voX=$oriX -voY=$oriY -vpsi=$psi -vdifX=$difX -vdifY=$difY -vpxsize=$pxsize '{print (($oX+(((difX*pxsize)*(-cos(($psi)*(3.141592/180))))-((difY*pxsize)*(sin(($psi)*(3.141592/180))))))),(($oY+(((difX*pxsize)*(sin(($psi)*(3.141592/180))))-((difY*pxsize)*(cos(($psi)*(3.141592/180)))))))}' > offsets.tmp
 
 paste data.tmp offsets.tmp > all.tmp 
 cat header.tmp all.tmp > $outfile
