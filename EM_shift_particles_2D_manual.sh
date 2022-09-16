@@ -12,7 +12,7 @@
 #      \/
 #     (-)
 
-echo EM_shift_particles_2D_manual.sh output.star input.star shiftX-px shiftY-px
+echo EM_shift_particles_2D_manual.sh output.star input.star shiftX-ang shiftY-ang
 
 
 difX=$3
@@ -26,7 +26,6 @@ oriX=`grep _rlnOriginX $datastar | awk -F"#" '{print $2}'`
 oriY=`grep _rlnOriginY $datastar | awk -F"#" '{print $2}' `
 psi=`grep "_rlnAnglePsi " $datastar | awk -F"#" '{print $2}' `
 numberOFfield=`grep _rln -n $datastar | awk -F":" 'END{print $1+1}'`
-pxsize=`relion_star_printtable $datastar data_optics _rlnImagePixelSize`
 
 echo "all set..."
 
@@ -40,7 +39,7 @@ awk -vlinenum=$numberOFfield 'NR<linenum{print}' $datastar | sed ':a;/^[ \n]*$/{
 
 awk -v oX=$oriX -v oY=$oriY -vlinenum=$numberOFfield 'NR>linenum-1{$oX=$oY="";print}' $datastar > data.tmp
 
-grep mrc $datastar | awk -voX=$oriX -voY=$oriY -vpsi=$psi -vdifX=$difX -vdifY=$difY -vpxsize=$pxsize '{print (($oX+(((difX*pxsize)*(-cos(($psi)*(3.141592/180))))-((difY*pxsize)*(sin(($psi)*(3.141592/180))))))),(($oY+(((difX*pxsize)*(sin(($psi)*(3.141592/180))))-((difY*pxsize)*(cos(($psi)*(3.141592/180)))))))}' > offsets.tmp
+grep mrc $datastar | awk -voX=$oriX -voY=$oriY -vpsi=$psi -vdifX=$difX -vdifY=$difY '{print (($oX+(((difX)*(-cos(($psi)*(3.141592/180))))-((difY)*(sin(($psi)*(3.141592/180))))))),(($oY+(((difX)*(sin(($psi)*(3.141592/180))))-((difY)*(cos(($psi)*(3.141592/180)))))))}' > offsets.tmp
 
 paste data.tmp offsets.tmp > all.tmp 
 cat header.tmp all.tmp > $outfile
